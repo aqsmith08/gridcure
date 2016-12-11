@@ -18,8 +18,8 @@ train.labels.org$interval.num <- sapply(X = train.labels.org$interval,
 
 ### Take sample to play around and avoid memory errors
 # TODO: Remove this when errors are solved
-train.org <- train.org[1:50000,]
-train.labels.org <- train.labels.org[1:50000]
+train.org <- train.org[1:500000,]
+train.labels.org <- train.labels.org[1:500000]
 
 # Remove 'extra' columns and dataframes to avoid memory errors
 train.org$interval <- NULL
@@ -63,10 +63,7 @@ validation  <- train.final[-train.index,]
 model <- train(label ~ reading.val + house.avg + house.stdev + val.var + val.per,
                data = train,
                method = "glm")
-
 pred <- predict(model, newdata=validation)
-validation$pred <- predict(model, newdata=validation)
-
 confusionMatrix(data=pred, validation$label)
 confusionMatrix(model)
 
