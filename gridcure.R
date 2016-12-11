@@ -2,6 +2,7 @@ library(caret)
 library(data.table)
 library(dplyr)
 library(dtplyr)
+library(rpart)
 library(tidyr)
 
 # Load the required files
@@ -68,9 +69,14 @@ confusionMatrix(data=pred, validation$label)
 confusionMatrix(model)
 
 # Tree model
-# tree <- rpart(label ~ reading.val + house.avg + house.stdev + house.min +
-#                house.max + val.pct + val.var + val.percentile, 
-#               method="class", data=train)
+tree <- rpart(label ~ reading.val + house.avg + house.stdev + house.min +
+                house.max + val.pct + val.var + val.per,
+              data = train,
+              method = "class")
+summary(tree)
+summary(predict(tree, validation, type="class"))
+validation$tree.pred <- predict(tree, validation, type="class")
+table(validation$tree.pred, validation$label)
 
 
 # TODO: Prepare the test file
