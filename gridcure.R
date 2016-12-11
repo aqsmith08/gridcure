@@ -33,7 +33,7 @@ train.final <- arrange(train.final, House.ID, interval.num)
 # Remove 'extra' dataframes to avoid memory errors
 rm(train.org, train.labels.org)
 
-# Create average, stdev, min and max values per house
+# Create average, stdev, min,  max and other values per house
 train.final <- group_by(train.final, House.ID) %>%
   mutate(
     house.avg =   mean(reading.val, na.rm = TRUE),
@@ -41,12 +41,8 @@ train.final <- group_by(train.final, House.ID) %>%
     house.min =   min(reading.val, na.rm = TRUE),
     house.max =   max(reading.val, na.rm = TRUE),
     val.pct =    (reading.val - house.avg) / house.avg,
-    val.var =    (reading.val - house.avg) ^2)
-
-# Get the percentile of each reading.val in the context of the whole sample
-# TODO: Consider finding a way to speed this up
-train.final$val.percentile <- sapply(X = train.final$reading.val,
-                                     function(x) ecdf(train.final$reading.val)(x))
+    val.var =    (reading.val - house.avg) ^2,
+    val.per =     percent_rank(reading.val))
 
 # Assign the house mean for observations where reading.val doesn't exist
 train.final[is.na(train.final$reading.val),]$reading.val <- train.final[
@@ -64,7 +60,7 @@ train <- train.final[train.index,]
 validation  <- train.final[-train.index,]
 
 # GLM model
-model <- train(label ~ reading.val + house.avg + house.stdev + val.var + val.percentile,
+model <- train(label ~ reading.val + house.avg + house.stdev + val.var + val.per,
                data = train,
                method = "glm")
 
@@ -93,7 +89,8 @@ test.final <- group_by(test.org, House.ID) %>%
     house.min =   min(reading.val, na.rm = TRUE),
     house.max =   max(reading.val, na.rm = TRUE),
     val.pct =    (reading.val - house.avg) / house.avg,
-    val.var =    (reading.val - house.avg) ^2)
+    val.var =    (reading.val - house.avg) ^2,
+    val.per =     percent_rank(reading.val))
 
 # Assign the house mean for observations where reading.val doesn't exist
 test.final[is.na(test.final$reading.val),]$reading.val <- test.final[
