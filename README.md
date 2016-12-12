@@ -23,8 +23,8 @@ Reading values when the EV is charging tend to be greater than the 75th percenti
 
 However, precision is poor if only considering reading value percentile. 
 
-Reading Value Percentile | Precision | Recall
------------------------- | ----------|-------
+Percentile | Precision | Recall
+---------- | ----------|-------
 65 | .06 | .926
 75 | .08 | .878
 85 | .125 | .784
