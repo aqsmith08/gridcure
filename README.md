@@ -14,3 +14,18 @@ The file  "EV_train_labels.csv" indicates the time intervals on which an electri
 A solution to part B might consist of a prediction of the probability that an electric car was charging for each house and time interval in the test set.
 
 Please include code and explain your reasoning.  What do you expect the accuracy of your predictions to be?
+
+## Sample Observations
+
+1. Reading values when the EV is charging tend to be greater than the 75th percentile value per house.
+
+![boxplot_percentile](https://github.com/aqsmith08/gridcure/blob/master/boxplot_percentile.png)
+
+2. However, precision is poor if only considering reading value percentile. 
+
+Reading Value Percentile | Precision | Recall
+------------------------ | ----------|-------
+65 | .06 | .926
+75 | .08 | .878
+85 | .125 | .784
+95 | .227 | .479
