@@ -17,11 +17,11 @@ Please include code and explain your reasoning.  What do you expect the accuracy
 
 ## Sample Observations
 
-1. Reading values when the EV is charging tend to be greater than the 75th percentile value per house.
+Reading values when the EV is charging tend to be greater than the 75th percentile value per house.
 
 ![boxplot_percentile](https://github.com/aqsmith08/gridcure/blob/master/boxplot_percentile.png)
 
-2. However, precision is poor if only considering reading value percentile. 
+However, precision is poor if only considering reading value percentile. 
 
 Reading Value Percentile | Precision | Recall
 ------------------------ | ----------|-------
