@@ -45,9 +45,16 @@ train.final <- group_by(train.final, House.ID) %>%
     val.var =    (reading.val - house.avg) ^2,
     val.per =     percent_rank(reading.val))
 
+# Get the difference in values
+train.final$val.diff <- ave(train.final$reading.val,
+                            factor(train.final$House.ID), FUN = function(x) c(NA, diff(x)))
+
 # Assign the house mean for observations where reading.val doesn't exist
 train.final[is.na(train.final$reading.val),]$reading.val <- train.final[
   is.na(train.final$reading.val),]$house.avg
+
+# Assign no difference for observations where val.diff doesn't exist
+train.final[is.na(train.final$val.diff),]$val.diff <- 0
 
 train.final$label <- as.factor(train.final$label)
 
@@ -61,7 +68,7 @@ train <- train.final[train.index,]
 validation  <- train.final[-train.index,]
 
 # GLM model
-model <- train(label ~ reading.val + house.avg + house.stdev + val.var + val.per,
+model <- train(label ~ val.per + val.pct + val.diff + house.avg + val.var + house.stdev,
                data = train,
                method = "glm")
 pred <- predict(model, newdata=validation)
