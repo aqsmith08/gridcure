@@ -22,6 +22,10 @@ ggplot(train.final, aes(label, val.per, color = label)) + geom_boxplot()
 ggplot(train.final, aes(label, val.pct, color = label)) + geom_boxplot() +
   coord_cartesian(ylim = c(0, 10))
 
+# Reading Val diff does seem to be slightly higher at EV charging moments than 30 minutes prior
+ggplot(train.final, aes(label, val.diff, color = label)) + geom_boxplot() +
+  coord_cartesian(ylim = c(-5, 5))
+
 # Check out how Reading Val percentile impacts precision and recall
 train.final$sixfive[train.final$val.per >= .65] <- TRUE
 train.final$sixfive[train.final$val.per < .65] <- FALSE
