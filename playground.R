@@ -1,3 +1,5 @@
+# Playground script
+
 library(ggplot2)
 
 # Create label datasets
